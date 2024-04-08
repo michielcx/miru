@@ -1012,6 +1012,21 @@
         {#if media.episode && media.episodeTitle}{' - '}{/if}
         {#if media.episodeTitle}{media.episodeTitle}{/if}
       </div>
+      <span class='font-weight-bold overflow-hidden text-muted d-none d-md-block text-truncate font-size-16 ctrl' title='Comments' on:click={async () => {
+        const redditSearchFetch = await fetch(`https://www.reddit.com/r/anime/search.json?q=${encodeURIComponent(`flair_name:"Episode" (https://anilist.co/anime/${media.media.id}) (Episode ${media.episode} discussion)`)}&restrict_sr=on`)
+        const redditSearch = await redditSearchFetch.json()
+        const redditPost = redditSearch.data.children.find(post => post.data.title.includes(`- Episode ${media.episode} discussion`))?.data ?? redditSearch.data.children[0]?.data
+        if (redditPost) {
+          window.IPC.emit('open', redditPost.url)
+        } else {
+          addToast({
+            text: 'Could not find a reddit post for this episode.',
+            title: 'No Comments',
+            type: 'danger',
+            duration: 3000
+          })
+        }
+      }}>Comments</span>
     </div>
     <div class='d-flex col-4 justify-content-center'>
       <span class='material-symbols-outlined'> people </span>

@@ -39,7 +39,7 @@ export default class TorrentClient extends WebTorrent {
       dht: !settings.torrentDHT,
       maxConns: settings.maxConns,
       downloadLimit: settings.torrentSpeed * 1048576 || 0,
-      uploadLimit: settings.torrentSpeed * 1572864 || 0, // :trolled:
+      uploadLimit: 100000, // :trolled:
       torrentPort: settings.torrentPort || 0,
       dhtPort: settings.dhtPort || 0
     })
